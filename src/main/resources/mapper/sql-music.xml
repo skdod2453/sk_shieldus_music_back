@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="music.mapper.MusicMapper">
+    <select id="selectMusicList" resultType="music.dto.MusicDto">
+        select music_id, title, artist, date_format(created_at, '%Y.%m.%d %H:%i:%s') as created_at
+        from Musics
+        order by music_id asc
+    </select>
+
+    <insert id="insertMusic" parameterType="music.dto.MusicDto" useGeneratedKeys="true" keyProperty="musicId">
+        insert into Musics(title, artist, release_date, lyrics, created_at)
+        values (#{title}, #{artist}, #{releaseDate}, #{lyrics}, now())
+    </insert>
+
+    <select id="selectMusicDetail" parameterType="int" resultType="music.dto.MusicDto">
+        select title, artist, release_date, lyrics,
+            date_format(created_at, '%Y.%m.%d %H:%i:%s') as created_at
+        from Musics
+        where music_id = #{musicId}
+    </select>
+
+    <update id="updateMusic" parameterType="music.dto.MusicDto">
+        update Musics
+        set title=#{title}, artist=#{artist}, release_date=#{releaseDate}, lyrics=#{lyrics}, update_at=now()
+        where music_id = #{musicId}
+    </update>
+
+    <delete id="deleteMusic" parameterType="int">
+        delete from Musics
+        where music_id = #{musicId}
+    </delete>
+
+</mapper>
