@@ -1,18 +1,28 @@
 package music.service;
 
+import lombok.extern.slf4j.Slf4j;
+import music.common.FileUtils;
 import music.dto.MusicDto;
+import music.dto.MusicFileDto;
 import music.mapper.MusicMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import java.util.Iterator;
 import java.util.List;
 
-@Transactional
+@Slf4j
 @Service
 public class MusicServiceImpl implements MusicService {
     @Autowired
     private MusicMapper musicMapper;
+
+    @Autowired
+    private FileUtils fileUtils;
 
     @Override
     public List<MusicDto> selectMusicList() {
@@ -20,13 +30,23 @@ public class MusicServiceImpl implements MusicService {
     }
 
     @Override
-    public void insertMusic(MusicDto musicDto) {
+    public void insertMusic(MusicDto musicDto, MultipartHttpServletRequest request) throws  Exception {
         musicMapper.insertMusic(musicDto);
+
+        List<MusicFileDto> fileInfoList = fileUtils.parseFileInfo(musicDto.getMusicId(), request);
+
+        if(!CollectionUtils.isEmpty(fileInfoList)) {
+            musicMapper.insertMusicFileList(fileInfoList);
+        }
     }
 
     @Override
     public MusicDto selectMusicDetail(int musicId) {
-        return musicMapper.selectMusicDetail(musicId);
+        MusicDto musicDto = musicMapper.selectMusicDetail(musicId);
+        List<MusicFileDto> musicFileInfo = musicMapper.selectMusicFileList(musicId);
+        musicDto.setFileInfoList(musicFileInfo);
+
+        return musicDto;
     }
 
     @Override
@@ -39,5 +59,10 @@ public class MusicServiceImpl implements MusicService {
         MusicDto musicDto = new MusicDto();
         musicDto.setMusicId(musicId);
         musicMapper.deleteMusic(musicDto);
+    }
+
+    @Override
+    public MusicFileDto selectMusicFileInfo(int id, int musicId) {
+        return musicMapper.selectMusicFileInfo(id, musicId);
     }
 }

@@ -14,14 +14,14 @@
 
     <select id="selectMusicDetail" parameterType="int" resultType="music.dto.MusicDto">
         select title, artist, release_date, lyrics,
-            date_format(created_at, '%Y.%m.%d %H:%i:%s') as created_at
+        date_format(created_at, '%Y.%m.%d %H:%i:%s') as created_at
         from Musics
         where music_id = #{musicId}
     </select>
 
     <update id="updateMusic" parameterType="music.dto.MusicDto">
         update Musics
-        set title=#{title}, artist=#{artist}, release_date=#{releaseDate}, lyrics=#{lyrics}, update_at=now()
+        set title=#{title}, artist=#{artist}, release_date=#{releaseDate}, lyrics=#{lyrics}, updated_at=now()
         where music_id = #{musicId}
     </update>
 
@@ -29,5 +29,26 @@
         delete from Musics
         where music_id = #{musicId}
     </delete>
+
+    <insert id="insertMusicFileList" parameterType="music.dto.MusicFileDto">
+        insert into Music_File
+        (music_id, original_file_name, stored_file_path, file_size, created_datetime)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.musicId}, #{item.originalFileName}, #{item.storedFilePath}, #{item.fileSize}, now())
+        </foreach>
+    </insert>
+
+    <select id="selectMusicFileList" parameterType="int" resultType="music.dto.MusicFileDto">
+        select id, music_id, original_file_name, stored_file_path, format(round(file_size/1024), 0) as file_size
+        from Music_File
+        where music_id = #{musicId}
+    </select>
+
+    <select id="selectMusicFileInfo" parameterType="int" resultType="music.dto.MusicFileDto">
+        select original_file_name, stored_file_path, file_size
+        from Music_File
+        where id = #{id} and music_id = #{musicId}
+    </select>
 
 </mapper>

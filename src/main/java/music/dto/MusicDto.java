@@ -2,6 +2,8 @@ package music.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class MusicDto {
     private int musicId;
@@ -12,4 +14,5 @@ public class MusicDto {
     private String createdAt;
     private String updatedAt;
 
+    private List<MusicFileDto> fileInfoList;
 }
