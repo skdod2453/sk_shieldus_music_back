@@ -1,6 +1,5 @@
 package music.service;
 
-import lombok.extern.slf4j.Slf4j;
 import music.common.FileUtils;
 import music.dto.MusicDto;
 import music.dto.MusicFileDto;
@@ -8,14 +7,11 @@ import music.mapper.MusicMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import java.util.Iterator;
 import java.util.List;
 
-@Slf4j
 @Service
 public class MusicServiceImpl implements MusicService {
     @Autowired
@@ -56,13 +52,20 @@ public class MusicServiceImpl implements MusicService {
 
     @Override
     public void deleteMusic(int musicId) {
-        MusicDto musicDto = new MusicDto();
-        musicDto.setMusicId(musicId);
-        musicMapper.deleteMusic(musicDto);
+        musicMapper.deleteMusic(musicId);
     }
 
     @Override
     public MusicFileDto selectMusicFileInfo(int id, int musicId) {
         return musicMapper.selectMusicFileInfo(id, musicId);
+    }
+
+    @Override
+    public void insertmusicWithFile(MusicDto musicDto, MultipartFile[] files) throws Exception {
+        musicMapper.insertMusic(musicDto);
+        List<MusicFileDto> fileInfoList = fileUtils.parseFileInfo(musicDto.getMusicId(), files);
+        if (!CollectionUtils.isEmpty(fileInfoList)) {
+            musicMapper.insertMusicFileList(fileInfoList);
+        }
     }
 }

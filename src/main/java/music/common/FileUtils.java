@@ -57,7 +57,7 @@ public class FileUtils {
 
                 MusicFileDto dto = new MusicFileDto();
                 dto.setMusicId(musicId);
-                dto.setFileSize(Long.toString(file.getSize()));
+                dto.setFileSize("" + file.getSize());
                 dto.setOriginalFileName(file.getOriginalFilename());
                 dto.setStoredFilePath(storedDir + "/" + storedFileName);
                 fileInfoList.add(dto);
@@ -65,6 +65,52 @@ public class FileUtils {
                 dir = new File(storedDir + "/" + storedFileName);
                 file.transferTo(dir);
             }
+        }
+        return fileInfoList;
+    }
+    public List<MusicFileDto> parseFileInfo(int musicId, MultipartFile[] files) throws Exception {
+
+        if (ObjectUtils.isEmpty(files)) {
+            return null;
+        }
+
+        List<MusicFileDto> fileInfoList = new ArrayList<>();
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd");
+        ZonedDateTime now = ZonedDateTime.now();
+        String storedDir = uploadDir + now.format(dtf);
+        File dir = new File(storedDir);
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+
+        for (MultipartFile file : files) {
+            if (file.isEmpty()) continue;
+
+            String contentType = file.getContentType();
+            if (ObjectUtils.isEmpty(contentType)) continue;
+
+            String fileExtension = "";
+            if (contentType.contains("jpeg")) {
+                fileExtension = ".jpg";
+            } else if (contentType.contains("png")) {
+                fileExtension = ".png";
+            } else if (contentType.contains("gif")) {
+                fileExtension = ".gif";
+            } else {
+                continue;
+            }
+
+            String storedFileName = System.nanoTime() + fileExtension;
+
+            MusicFileDto dto = new MusicFileDto();
+            dto.setFileSize("" + file.getSize());
+            dto.setOriginalFileName(file.getOriginalFilename());
+            dto.setStoredFilePath(storedDir + "/" + storedFileName);
+            fileInfoList.add(dto);
+
+            dir = new File(storedDir + "/" + storedFileName);
+            file.transferTo(dir);
         }
         return fileInfoList;
     }

@@ -8,6 +8,7 @@ import music.service.MusicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.net.URLEncoder;
@@ -65,5 +66,11 @@ public class MusicController {
         response.getOutputStream().flush();
         response.getOutputStream().close();
     }
+    public void insertBoard(
+            @RequestPart(value="data", required=true) MusicDto musicDto,
+            @RequestPart(value="files", required=false) MultipartFile[] files) throws Exception {
+        musicService.insertmusicWithFile(musicDto, files);
+    }
+
 
 }

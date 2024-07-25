@@ -13,7 +13,7 @@ public interface MusicMapper {
     void insertMusic(MusicDto musicDto);
     MusicDto selectMusicDetail(int musicId);
     void updateMusic(MusicDto musicDto);
-    void deleteMusic(MusicDto musicDto);
+    void deleteMusic(int musicId);
     void insertMusicFileList(List<MusicFileDto> fileInfoList);
     List<MusicFileDto> selectMusicFileList(int musicId);
     MusicFileDto selectMusicFileInfo(@Param("id") int id, @Param("musicId") int musicId);
