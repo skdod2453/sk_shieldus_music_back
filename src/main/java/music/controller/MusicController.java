@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.net.URLEncoder;
 import java.nio.file.Files;
@@ -25,13 +24,18 @@ public class MusicController {
     private MusicService musicService;
 
     @GetMapping("/music")
-    public List<MusicDto> openMusicList(HttpServletRequest request) throws  Exception {
+    public List<MusicDto> openMusicList(HttpServletRequest request) throws Exception {
         return musicService.selectMusicList();
     }
 
+    @GetMapping("/music/lyrics/{lyrics}")
+    public List<MusicDto> openMusicList( @PathVariable("lyrics") String lyrics, HttpServletRequest request) throws Exception {
+        return musicService.selectMusicTitle(lyrics);
+    }
+
     @PostMapping("/music/write")
-    public void insertMusic(@RequestBody MusicDto musicDto, MultipartHttpServletRequest request) throws Exception {
-        musicService.insertMusic(musicDto, request);
+    public void insertMusic(@RequestPart("data") MusicDto musicDto, @RequestPart("files") MultipartFile[] files) throws Exception {
+        musicService.insertmusicWithFile(musicDto, files);
     }
 
     @GetMapping("/music/{musicId}")
@@ -40,7 +44,7 @@ public class MusicController {
     }
 
     @PutMapping("/music/{musicId}")
-    public void updateMusic(@PathVariable("musicId") int musicId, @RequestBody MusicDto musicDto) throws  Exception {
+    public void updateMusic(@PathVariable("musicId") int musicId, @RequestBody MusicDto musicDto) throws Exception {
         musicDto.setMusicId(musicId);
         musicService.updateMusic(musicDto);
     }
@@ -66,11 +70,4 @@ public class MusicController {
         response.getOutputStream().flush();
         response.getOutputStream().close();
     }
-    public void insertBoard(
-            @RequestPart(value="data", required=true) MusicDto musicDto,
-            @RequestPart(value="files", required=false) MultipartFile[] files) throws Exception {
-        musicService.insertmusicWithFile(musicDto, files);
-    }
-
-
 }

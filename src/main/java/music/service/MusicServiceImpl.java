@@ -26,6 +26,11 @@ public class MusicServiceImpl implements MusicService {
     }
 
     @Override
+    public List<MusicDto> selectMusicTitle(String lyrics) {
+        return musicMapper.selectMusicTitle(lyrics);
+    }
+
+    @Override
     public void insertMusic(MusicDto musicDto, MultipartHttpServletRequest request) throws  Exception {
         musicMapper.insertMusic(musicDto);
 

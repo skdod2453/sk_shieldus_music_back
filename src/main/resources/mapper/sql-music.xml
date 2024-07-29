@@ -7,6 +7,15 @@
         order by music_id asc
     </select>
 
+    <select id="selectMusicTitle" parameterType="String" resultType="music.dto.MusicDto">
+        <![CDATA[
+    select music_id, title, artist, date_format(created_at, '%Y.%m.%d %H:%i:%s') as created_at
+    from Musics
+    where lyrics LIKE CONCAT('%', #{lyrics}, '%')
+    order by music_id asc
+    ]]>
+    </select>
+
     <insert id="insertMusic" parameterType="music.dto.MusicDto" useGeneratedKeys="true" keyProperty="musicId">
         insert into Musics(title, artist, release_date, lyrics, created_at)
         values (#{title}, #{artist}, #{releaseDate}, #{lyrics}, now())

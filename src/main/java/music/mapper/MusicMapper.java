@@ -10,6 +10,7 @@ import java.util.List;
 @Mapper
 public interface MusicMapper {
     List<MusicDto> selectMusicList();
+    List<MusicDto> selectMusicTitle(String lyrics);
     void insertMusic(MusicDto musicDto);
     MusicDto selectMusicDetail(int musicId);
     void updateMusic(MusicDto musicDto);

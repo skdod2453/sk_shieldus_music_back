@@ -104,6 +104,7 @@ public class FileUtils {
             String storedFileName = System.nanoTime() + fileExtension;
 
             MusicFileDto dto = new MusicFileDto();
+            dto.setMusicId(musicId);
             dto.setFileSize("" + file.getSize());
             dto.setOriginalFileName(file.getOriginalFilename());
             dto.setStoredFilePath(storedDir + "/" + storedFileName);
