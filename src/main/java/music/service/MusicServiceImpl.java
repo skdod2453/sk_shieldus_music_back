@@ -31,14 +31,14 @@ public class MusicServiceImpl implements MusicService {
     }
 
     @Override
-    public void insertMusic(MusicDto musicDto, MultipartHttpServletRequest request) throws  Exception {
+    public void insertMusic(MusicDto musicDto) throws  Exception {
         musicMapper.insertMusic(musicDto);
 
-        List<MusicFileDto> fileInfoList = fileUtils.parseFileInfo(musicDto.getMusicId(), request);
-
-        if(!CollectionUtils.isEmpty(fileInfoList)) {
-            musicMapper.insertMusicFileList(fileInfoList);
-        }
+//        List<MusicFileDto> fileInfoList = fileUtils.parseFileInfo(musicDto.getMusicId(), request);
+//
+//        if(!CollectionUtils.isEmpty(fileInfoList)) {
+//            musicMapper.insertMusicFileList(fileInfoList);
+//        }
     }
 
     @Override

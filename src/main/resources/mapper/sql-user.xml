@@ -56,4 +56,9 @@
     <delete id="delete" parameterType="String">
         DELETE FROM user WHERE user_id = #{userId}
     </delete>
+
+    <select id="selectAdmin" resultType="music.dto.Users">
+        SELECT no, user_id, name, email, DATE_FORMAT(reg_date, '%Y.%m.%d %H:%i:%s') AS reg_date
+        FROM user
+    </select>
 </mapper>

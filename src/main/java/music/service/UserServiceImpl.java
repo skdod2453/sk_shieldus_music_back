@@ -15,9 +15,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -93,5 +95,10 @@ public class UserServiceImpl implements UserService{
     @Override
     public int delete(String userId) throws Exception {
         return userMapper.delete(userId);
+    }
+
+    @Override
+    public List<Users> selectAdmin() throws Exception {
+        return userMapper.selectAdmin();
     }
 }

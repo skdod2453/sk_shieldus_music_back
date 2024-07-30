@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
+
 
 @Slf4j
 @RestController
@@ -91,5 +93,10 @@ public class UserController {
             return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
         }
 
+    }
+
+    @GetMapping("/admin")
+    public List<Users> openUsers() throws Exception{
+        return userService.selectAdmin();
     }
 }

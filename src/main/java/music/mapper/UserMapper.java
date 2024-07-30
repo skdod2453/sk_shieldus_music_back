@@ -5,6 +5,8 @@ import music.dto.Users;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 @Mapper
 public interface UserMapper {
 
@@ -26,4 +28,5 @@ public interface UserMapper {
     // 회원 삭제
     int delete(@Param("userId") String userId) throws Exception;
 
+    List<Users> selectAdmin();
 }

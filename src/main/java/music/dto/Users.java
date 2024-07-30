@@ -14,8 +14,8 @@ public class Users {
     private String userPwCheck;     // 비밀번호 확인
     private String name;
     private String email;
-    private Date regDate;
-    private Date updDate;
+    private String regDate;
+    private String updDate;
     private int enabled;            // 활성화 여부
 
     // 권한 목록

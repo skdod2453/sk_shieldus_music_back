@@ -2,7 +2,10 @@ package music.service;
 
 
 import jakarta.servlet.http.HttpServletRequest;
+import music.dto.MusicDto;
 import music.dto.Users;
+
+import java.util.List;
 
 public interface UserService {
     // 회원 등록
@@ -19,4 +22,6 @@ public interface UserService {
 
     // 회원 삭제
     public int delete(String userId) throws Exception;
+
+    List<Users> selectAdmin() throws Exception;
 }

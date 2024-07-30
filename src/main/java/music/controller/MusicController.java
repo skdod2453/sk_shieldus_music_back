@@ -34,8 +34,15 @@ public class MusicController {
     }
 
     @PostMapping("/music/write")
-    public void insertMusic(@RequestPart("data") MusicDto musicDto, @RequestPart("files") MultipartFile[] files) throws Exception {
-        musicService.insertmusicWithFile(musicDto, files);
+    public void insertMusic(@RequestPart("data") MusicDto musicDto,
+                            @RequestPart(value = "files", required = false) MultipartFile[] files) throws Exception {
+        if (files == null || files.length == 0) {
+            // 파일이 없는 경우 data만 처리
+            musicService.insertMusic(musicDto);
+        } else {
+            // 파일이 있는 경우 data와 파일 모두 처리
+            musicService.insertmusicWithFile(musicDto, files);
+        }
     }
 
     @GetMapping("/music/{musicId}")
